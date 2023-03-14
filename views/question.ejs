@@ -1,0 +1,50 @@
+<main>
+  <section>
+    <h2><%= question.title %></h2>
+    <p><%= question.body %></p>
+    <p>Asked by <%= question.username %> on <%= question.date %></p>
+
+    <% if (currentUser && currentUser.id === question.user_id) { %>
+      <form method="POST" action="/questions/<%= question.id %>?_method=DELETE">
+        <button type="submit" class="btn btn-danger">Delete Question</button>
+      </form>
+    <% } %>
+  </section>
+
+  <section>
+    <h3>Answers</h3>
+
+    <% if (answers.length === 0) { %>
+      <p>No answers yet.</p>
+    <% } else { %>
+      <ul>
+        <% answers.forEach(function(answer) { %>
+          <li>
+            <p><%= answer.answer_text %></p>
+            <p>Answered by <%= answer.username %> on <%= answer.date %></p>
+          </li>
+        <% }) %>
+      </ul>
+    <% } %>
+  </section>
+
+  <section>
+    <h3>Add an Answer</h3>
+
+    <% if (currentUser) { %>
+      <form method="POST" action="/questions/<%= question.id %>/answers">
+        <div>
+          <label for="answer_text">Your Answer:</label>
+          <textarea name="answer_text" id="answer_text" required></textarea>
+        </div>
+        <div>
+          <button type="submit" class="btn btn-primary">Submit Answer</button>
+        </div>
+      </form>
+    <% } else { %>
+      <p>You must be logged in to answer this question.</p>
+      <p><a href="/login">Log in here.</a></p>
+    <% } %>
+  </section>
+</main>
+
