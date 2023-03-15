@@ -1,0 +1,28 @@
+<main>
+    <section>
+      <h2><%= question.title %></h2>
+      <p><%= question.body %></p>
+      <p>Asked  <%= question.username %> on <%= question.date %></p>
+    </section>
+  
+    <section>
+      <h3>Add an Answer</h3>
+  
+      <% if (currentUser) { %>
+        <form method="POST" action="/questions/<%= question.id %>/answers">
+          <div>
+            <label for="answer_text">Your Answer:</label>
+            <textarea name="answer_text" id="answer_text" required></textarea>
+          </div>
+          <div>
+            <button type="submit" class="btn btn-primary">Submit Answer</button>
+          </div>
+        </form>
+      <% } else { %>
+        <p>You must be logged in to answer this question.</p>
+        <p><a href="/login">Log in here.</a></p>
+      <% } %>
+    </section>
+  </main>
+  
+  

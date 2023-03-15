@@ -5,10 +5,18 @@ const session = require('express-session')
 const MemoryStore = require('memorystore')(session)
 const expressLayouts = require("express-ejs-layouts")
 
+const methodOverride = require("./middlewares/method_override")
+
+const homeController = require('./controllers/home_controller');
+const userController = require('./controllers/user_controller');
+const questionController = require('./controllers/question_controller');
+
 app.set("view engine", "ejs")
 
 app.use(express.static("public")) 
-app.use(express.urlencoded({ extended: true })) 
+app.use(express.urlencoded({ extended: true }))
+app.use(methodOverride)
+
 app.use(expressLayouts)
 app.use(
   session({
@@ -21,41 +29,34 @@ app.use(
   saveUninitialized: true,
 }))
 
-app.get('/', (req, res) => {
-  res.render('home');
+app.use((req, res, next) => {
+  res.locals.session = req.session;
+  next();
+});
+
+app.use((req, res, next) => {
+  res.locals.currentUser = req.session.user;
+  next();
 });
 
 
-app.get("/login", (req, res) => {
-  res.render("loginForm")
-})
+// Home route
+app.get('/', homeController.getHome);
 
-app.post("/login", (req, res) => {
-  
-})
+// User routes
+app.get('/login', userController.getLoginForm);
+app.post('/login', userController.login);
+app.get('/signup', userController.getSignupForm);
+app.post('/signup', userController.signUp);
+app.post('/logout', userController.logout);
 
-app.get("/signup", (req, res) => {
-  res.render("signupForm")
-})
-
-app.post("/logout", (req, res) => {
-  
-})
-
-app.get("/questions", (req, res) => {
-  
-})
-
-app.get("/questions/new", (req, res) => {
-  res.render("newQuestion")
-})
-
-
-
-
-
-
-
+// Question routes
+app.get('/questions', questionController.getAllQuestions);
+app.get('/questions/new', questionController.getNewQuestionForm);
+app.post('/questions', questionController.createQuestion);
+app.get('/questions/:id', questionController.getQuestion);
+app.get('/questions/:id/answers/new', questionController.getNewAnswerForm);
+app.post('/questions/:id/answers', questionController.createAnswer);
 
 
 app.listen(port, () => {

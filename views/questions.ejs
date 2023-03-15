@@ -1,0 +1,11 @@
+<h1>Questions</h1>
+<ul>
+    <% questions.forEach(question => { %>
+        <li>
+            <h3><%= question.title %></h3>
+            <p><%= question.body %></p>
+            <a href="/questions/<%= question.id %>">View Details</a>
+        </li>
+    <% }) %>
+</ul>
+<a href="/questions/new">Ask a new question</a>
