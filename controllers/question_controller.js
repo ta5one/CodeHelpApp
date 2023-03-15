@@ -34,7 +34,6 @@ const createQuestion = async (req, res) => {
 
 const getQuestion = async (req, res) => {
   const questionId = req.params.id;
-  // console.log(questionId);
   try {
     const question = await db.query(`
       SELECT questions.*, users.username 
@@ -42,19 +41,32 @@ const getQuestion = async (req, res) => {
       JOIN users ON questions.user_id = users.id
       WHERE questions.id = $1
     `, [questionId]);
-    
+
+    // Fetch answers for the question
+    const answers = await db.query(`
+      SELECT answers.*, users.username
+      FROM answers
+      JOIN users ON answers.user_id = users.id
+      WHERE answers.question_id = $1
+    `, [questionId]);
+
     if (question.rows.length === 0) {
       res.status(404).send("Question not found");
       return;
     }
 
-    const formattedDate = new Date(question.rows[0].created_at).toLocaleDateString();
-    // console.log(req.session.user)
+    const formattedQuestionDate = new Date(question.rows[0].created_at).toLocaleDateString();
+    const formattedAnswers = answers.rows.map(answer => ({
+      ...answer,
+      date: new Date(answer.created_at).toLocaleDateString()
+    }));
+
     res.render("questionDetails", {
       question: {
         ...question.rows[0],
         username: question.rows[0].username,
-        date: formattedDate,
+        date: formattedQuestionDate,
+        answers: formattedAnswers,
       },
       currentUser: req.session.user
     });
@@ -63,6 +75,8 @@ const getQuestion = async (req, res) => {
     res.status(500).send("Server error");
   }
 };
+
+
 
   
   
@@ -74,21 +88,22 @@ const getNewAnswerForm = async (req, res) => {
 };
 
 const createAnswer = async (req, res) => {
-    const questionId = req.params.id;
-    const userId = req.session.userId;
-    const { answer_text, metadata } = req.body;
-  
-    try {
-      await db.query(
-        'INSERT INTO answers (question_id, user_id, answer_text, metadata, created_at) VALUES ($1, $2, $3, $4, NOW())',
-        [questionId, userId, answer_text, metadata]
-      );
-      res.redirect(`/questions/${questionId}`);
-    } catch (error) {
-      console.error(error);
-      res.status(500).send('Server error');
-    }
-  };
+  const questionId = req.params.id;
+  const { answer_text } = req.body;
+  const userId = req.session.user.id; 
+
+  try {
+    await db.query(
+      'INSERT INTO answers (question_id, user_id, answer_text, created_at) VALUES ($1, $2, $3, NOW())',
+      [questionId, userId, answer_text]
+    );
+    res.redirect(`/questions/${questionId}`);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Server error');
+  }
+};
+
 
   const deleteQuestion = async (req, res) => {
     const questionId = req.params.id;
