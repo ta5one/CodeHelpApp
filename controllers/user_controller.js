@@ -47,8 +47,16 @@ const signUp = async (req, res) => {
 
   try {
     const passwordDigest = await bcrypt.hash(password, 10);
+
+    // Check if the username already exists
+    const usernameCheck = await db.query('SELECT * FROM users WHERE username = $1', [username]);
+    if (usernameCheck.rows.length > 0) {
+      res.status(409).send('Username already exists');
+      return;
+    }
+
     const result = await db.query(
-      'INSERT INTO users (username, email, password_digest, created_at) VALUES ($1, $2, $3, NOW()) RETURNING id, username, email', // add email here
+      'INSERT INTO users (username, email, password_digest, created_at) VALUES ($1, $2, $3, NOW()) RETURNING id, username, email',
       [username, email, passwordDigest]
     );
     const user = result.rows[0];
@@ -64,6 +72,7 @@ const signUp = async (req, res) => {
     res.status(500).send('Server error');
   }
 };
+
 
 
 
