@@ -5,7 +5,14 @@
             <h3><%= question.title %></h3>
             <p><%= question.body %></p>
             <a href="/questions/<%= question.id %>">View Details</a>
+
+            <!-- Add the delete button form here -->
+            <form method="POST" action="/questions/<%= question.id %>/delete" style="display:inline;">
+                <input type="hidden" name="_method" value="DELETE">
+                <button type="submit" class="btn btn-danger">Delete</button>
+            </form>
         </li>
     <% }) %>
 </ul>
 <a href="/questions/new">Ask a new question</a>
+

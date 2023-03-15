@@ -23,16 +23,19 @@ const login = async (req, res) => {
       req.session.user = {
         id: user.id,
         username: user.username,
-      };
+        email: user.email,
+      }; // store only necessary fields
       res.redirect('/questions');
     } else {
       res.status(401).send('Invalid email or password');
     }
+    
   } catch (error) {
     console.error(error);
     res.status(500).send('Server error');
   }
 };
+
 
 
 const getSignupForm = (req, res) => {
@@ -45,7 +48,7 @@ const signUp = async (req, res) => {
   try {
     const passwordDigest = await bcrypt.hash(password, 10);
     const result = await db.query(
-      'INSERT INTO users (username, email, password_digest, created_at) VALUES ($1, $2, $3, NOW()) RETURNING id, username',
+      'INSERT INTO users (username, email, password_digest, created_at) VALUES ($1, $2, $3, NOW()) RETURNING id, username, email', // add email here
       [username, email, passwordDigest]
     );
     const user = result.rows[0];
@@ -53,6 +56,7 @@ const signUp = async (req, res) => {
     req.session.user = {
       id: user.id,
       username: user.username,
+      email: user.email, 
     };
     res.redirect('/questions');
   } catch (error) {
@@ -60,6 +64,7 @@ const signUp = async (req, res) => {
     res.status(500).send('Server error');
   }
 };
+
 
 
 const logout = (req, res) => {

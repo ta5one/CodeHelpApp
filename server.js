@@ -48,7 +48,7 @@ app.get('/login', userController.getLoginForm);
 app.post('/login', userController.login);
 app.get('/signup', userController.getSignupForm);
 app.post('/signup', userController.signUp);
-app.post('/logout', userController.logout);
+app.get('/logout', userController.logout);
 
 // Question routes
 app.get('/questions', questionController.getAllQuestions);
@@ -57,6 +57,7 @@ app.post('/questions', questionController.createQuestion);
 app.get('/questions/:id', questionController.getQuestion);
 app.get('/questions/:id/answers/new', questionController.getNewAnswerForm);
 app.post('/questions/:id/answers', questionController.createAnswer);
+app.delete('/questions/:id/delete', questionController.deleteQuestion);
 
 
 app.listen(port, () => {

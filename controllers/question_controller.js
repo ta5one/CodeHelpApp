@@ -17,7 +17,7 @@ const getNewQuestionForm = (req, res) => {
 
 const createQuestion = async (req, res) => {
   const { title, body } = req.body;
-  const userId = req.session.userId;
+  const userId = req.session.user.id; 
 
   try {
     await db.query(
@@ -31,8 +31,10 @@ const createQuestion = async (req, res) => {
   }
 };
 
+
 const getQuestion = async (req, res) => {
   const questionId = req.params.id;
+  // console.log(questionId);
   try {
     const question = await db.query(`
       SELECT questions.*, users.username 
@@ -87,6 +89,23 @@ const createAnswer = async (req, res) => {
       res.status(500).send('Server error');
     }
   };
+
+  const deleteQuestion = async (req, res) => {
+    const questionId = req.params.id;
+  
+    try {
+      // Delete the associated answers first
+      await db.query('DELETE FROM answers WHERE question_id = $1', [questionId]);
+  
+      // Then, delete the question
+      await db.query('DELETE FROM questions WHERE id = $1', [questionId]);
+  
+      res.redirect('/questions');
+    } catch (error) {
+      console.error(error);
+      res.status(500).send('Server error');
+    }
+  };
   
 
 module.exports = {
@@ -96,5 +115,6 @@ module.exports = {
   getQuestion,
   getNewAnswerForm,
   createAnswer,
+  deleteQuestion,
 };
 
