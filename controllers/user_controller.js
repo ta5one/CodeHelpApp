@@ -49,8 +49,13 @@ const getSignupForm = (req, res) => {
 
 // Registers a new user, creates a session, and redirects to the questions list
 const signUp = async (req, res) => {
-  const { username, email, password } = req.body;
+  const { username, email, password, password_confirmation } = req.body;
 
+  // Checks if passwords match
+  if (password !== password_confirmation) {
+    res.status(400).send('Passwords do not match');
+    return;
+  }
   try {
     const passwordDigest = await bcrypt.hash(password, 10);
 
