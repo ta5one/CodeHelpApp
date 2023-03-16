@@ -25,7 +25,7 @@ const login = async (req, res) => {
         id: user.id,
         username: user.username,
         email: user.email,
-      }; // store only necessary fields
+      }; 
       res.redirect('/questions');
     } else {
       res.status(401).send('Invalid email or password');

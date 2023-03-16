@@ -1,11 +1,17 @@
 <h1>New Question</h1>
 
 <form action="/questions" method="POST">
-  <label for="title">Title:</label>
+  <label for="title" class="new-quest">Title:</label>
   <input type="text" name="title" id="title" required>
+<p></p>
 
-  <label for="body">Question:</label>
-  <textarea name="body" id="body" cols="20" rows="5" required></textarea>
+<div>
+  <div>
+    <label for="body">Question:</label>
+  </div>  
+  <textarea name="body" id="body" cols="25" rows="10" required></textarea>
+</div>
+<button type="submit" class="quest-btn">Create Question</button>
 
-  <button type="submit">Create Question</button>
+  
 </form>

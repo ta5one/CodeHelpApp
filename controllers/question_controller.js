@@ -3,7 +3,12 @@ const db = require('./../db');
 
 const getAllQuestions = async (req, res) => {
   try {
-    const result = await db.query('SELECT * FROM questions ORDER BY created_at DESC');
+    const result = await db.query(`
+      SELECT questions.*, users.username
+      FROM questions
+      JOIN users ON questions.user_id = users.id
+      ORDER BY questions.created_at DESC
+    `);
     const questions = result.rows;
     res.render('questions', { req, questions });
   } catch (error) {

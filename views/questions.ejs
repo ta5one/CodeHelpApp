@@ -1,17 +1,20 @@
 <h1>Questions</h1>
-<ul>
+
+<div>
     <% questions.forEach(question => { %>
-        <li>
+        <div class="question-card">
             <h3><%= question.title %></h3>
             <p><%= question.body %></p>
-            <a href="/questions/<%= question.id %>">View Details</a>
+            <p>Posted by: <%= question.username %></p>
+            <a href="/questions/<%= question.id %>">View Thread</a>
 
             <form method="POST" action="/questions/<%= question.id %>/delete" style="display:inline;">
                 <input type="hidden" name="_method" value="DELETE">
                 <button type="submit" class="btn btn-danger">Delete</button>
             </form>
-        </li>
+        </div>
     <% }) %>
-</ul>
+</div>
 <a href="/questions/new" class="ask-question">Ask a new question</a>
+
 
