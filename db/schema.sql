@@ -24,3 +24,7 @@ CREATE TABLE answers (
   metadata TEXT,
   created_at TIMESTAMP DEFAULT NOW()
 );
+
+-- select * from answers;
+-- select * from users;
+-- select * from questions;

@@ -105,22 +105,38 @@ const createAnswer = async (req, res) => {
 };
 
 
-  const deleteQuestion = async (req, res) => {
-    const questionId = req.params.id;
-  
-    try {
-      // Delete the associated answers first
-      await db.query('DELETE FROM answers WHERE question_id = $1', [questionId]);
-  
-      // Then, delete the question
-      await db.query('DELETE FROM questions WHERE id = $1', [questionId]);
-  
-      res.redirect('/questions');
-    } catch (error) {
-      console.error(error);
-      res.status(500).send('Server error');
+const deleteQuestion = async (req, res) => {
+  const questionId = req.params.id;
+  const currentUserId = req.session.user.id;
+
+  try {
+    // Fetch the question from the database
+    const questionResult = await db.query('SELECT * FROM questions WHERE id = $1', [questionId]);
+    const question = questionResult.rows[0];
+
+    if (!question) {
+      res.status(404).send("Question not found");
+      return;
     }
-  };
+
+    // Checks if the current user is the owner of the question
+    if (question.user_id === currentUserId) {
+      // Deletesall answers associated with the question
+      await db.query('DELETE FROM answers WHERE question_id = $1', [questionId]);
+
+      // Delete the question
+      await db.query('DELETE FROM questions WHERE id = $1', [questionId]);
+      res.redirect('/questions');
+    } else {
+      res.status(403).send("Only the user who posted this can delete it");
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Server error');
+  }
+};
+
+
   
 
 module.exports = {
