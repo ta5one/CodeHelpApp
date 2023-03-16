@@ -3,6 +3,9 @@
       <h2><%= question.title %></h2>
       <p><%= question.body %></p>
       <p>Asked by <%= question.username %> on <%= question.date %></p>
+      <% if (currentUser && currentUser.id === question.user_id) { %>
+        <a href="/questions/<%= question.id %>/edit">Edit</a>
+      <% } %>
     </section>
   
     <section>
@@ -22,12 +25,14 @@
     </section>
   
     <section>
-      <h3>Add an Answer</h3>
-  
+      <h3>Submit an Answer</h3>
+    
       <% if (currentUser) { %>
         <form method="POST" action="/questions/<%= question.id %>/answers">
           <div>
-            <label for="answer_text">Your Answer:</label>
+            <label for="answer_text">Answer below:</label>
+          </div>
+          <div>
             <textarea name="answer_text" id="answer_text" required></textarea>
           </div>
           <div>
@@ -39,6 +44,7 @@
         <p><a href="/login">Log in here.</a></p>
       <% } %>
     </section>
+    
   </main>
   
   

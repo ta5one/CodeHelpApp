@@ -5,6 +5,7 @@ const getLoginForm = (req, res) => {
   res.render('loginForm', { req });
 };
 
+
 const login = async (req, res) => {
   const { email, password } = req.body;
 
@@ -35,7 +36,6 @@ const login = async (req, res) => {
     res.status(500).send('Server error');
   }
 };
-
 
 
 const getSignupForm = (req, res) => {
@@ -74,8 +74,6 @@ const signUp = async (req, res) => {
 };
 
 
-
-
 const logout = (req, res) => {
   req.session.destroy((err) => {
     if (err) {
@@ -86,6 +84,7 @@ const logout = (req, res) => {
     }
   });
 };
+
 
 module.exports = {
   getLoginForm,

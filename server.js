@@ -5,8 +5,10 @@ const session = require('express-session')
 const MemoryStore = require('memorystore')(session)
 const expressLayouts = require("express-ejs-layouts")
 
+const ensureLoggedIn = require('./middlewares/ensureLoggedIn');
 const methodOverride = require("./middlewares/method_override")
 
+// Controllers
 const homeController = require('./controllers/home_controller');
 const userController = require('./controllers/user_controller');
 const questionController = require('./controllers/question_controller');
@@ -48,16 +50,18 @@ app.get('/login', userController.getLoginForm);
 app.post('/login', userController.login);
 app.get('/signup', userController.getSignupForm);
 app.post('/signup', userController.signUp);
-app.get('/logout', userController.logout);
+app.get('/logout', ensureLoggedIn, userController.logout);
 
 // Question routes
-app.get('/questions', questionController.getAllQuestions);
-app.get('/questions/new', questionController.getNewQuestionForm);
-app.post('/questions', questionController.createQuestion);
-app.get('/questions/:id', questionController.getQuestion);
-app.get('/questions/:id/answers/new', questionController.getNewAnswerForm);
-app.post('/questions/:id/answers', questionController.createAnswer);
-app.delete('/questions/:id/delete', questionController.deleteQuestion);
+app.get('/questions', ensureLoggedIn, questionController.getAllQuestions);
+app.get('/questions/new', ensureLoggedIn, questionController.getNewQuestionForm);
+app.post('/questions', ensureLoggedIn, questionController.createQuestion);
+app.get('/questions/:id', ensureLoggedIn, questionController.getQuestion);
+app.get('/questions/:id/answers/new', ensureLoggedIn, questionController.getNewAnswerForm);
+app.post('/questions/:id/answers', ensureLoggedIn, questionController.createAnswer);
+app.get('/questions/:id/edit', ensureLoggedIn, questionController.getEditQuestionForm);
+app.put('/questions/:id', ensureLoggedIn, questionController.editQuestion);
+app.delete('/questions/:id/delete', ensureLoggedIn, questionController.deleteQuestion);
 
 
 app.listen(port, () => {

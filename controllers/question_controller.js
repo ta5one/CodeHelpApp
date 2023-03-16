@@ -1,5 +1,6 @@
 const db = require('./../db');
 
+
 const getAllQuestions = async (req, res) => {
   try {
     const result = await db.query('SELECT * FROM questions ORDER BY created_at DESC');
@@ -10,6 +11,7 @@ const getAllQuestions = async (req, res) => {
     res.status(500).send('Server error');
   }
 };
+
 
 const getNewQuestionForm = (req, res) => {
   res.render('newQuestion', { req });
@@ -77,11 +79,6 @@ const getQuestion = async (req, res) => {
 };
 
 
-
-  
-  
-  
-
 const getNewAnswerForm = async (req, res) => {
   const questionId = req.params.id;
   res.render('newAnswer', { req, questionId });
@@ -137,7 +134,50 @@ const deleteQuestion = async (req, res) => {
 };
 
 
-  
+const getEditQuestionForm = async (req, res) => {
+  const questionId = req.params.id;
+  const userId = req.session.user.id;
+  // console.log('User ID from session:', userId);
+
+  try {
+    const result = await db.query('SELECT * FROM questions WHERE id = $1 AND user_id = $2', [questionId, userId]);
+    const question = result.rows[0];
+
+    if (!question) {
+      res.status(404).send('Question not found or you are not authorized to edit this question');
+      return;
+    }
+
+    res.render('editQuestion', { question });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Server error');
+  }
+};
+
+
+const editQuestion = async (req, res) => {
+  const questionId = req.params.id;
+  const userId = req.session.user.id;
+  const { title, body } = req.body;
+  // console.log('User ID:', userId);
+
+  try {
+    const result = await db.query('UPDATE questions SET title = $1, body = $2 WHERE id = $3 AND user_id = $4 RETURNING *', [title, body, questionId, userId]);
+    const question = result.rows[0];
+
+    if (!question) {
+      res.status(404).send('Question not found or you are not authorized to edit this question');
+      return;
+    }
+
+    res.redirect(`/questions/${questionId}`);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Server error');
+  }
+};
+
 
 module.exports = {
   getAllQuestions,
@@ -147,5 +187,7 @@ module.exports = {
   getNewAnswerForm,
   createAnswer,
   deleteQuestion,
+  getEditQuestionForm,
+  editQuestion,
 };
 
