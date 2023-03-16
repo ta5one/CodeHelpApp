@@ -1,5 +1,5 @@
 function ensureLoggedIn(req, res, next) {
-    if (req.session.userId) {
+    if (req.session.user.id) {
       return next();
     }
   

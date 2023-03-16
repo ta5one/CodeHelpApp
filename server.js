@@ -5,6 +5,7 @@ const session = require('express-session')
 const MemoryStore = require('memorystore')(session)
 const expressLayouts = require("express-ejs-layouts")
 
+// Middlewares
 const ensureLoggedIn = require('./middlewares/ensureLoggedIn');
 const methodOverride = require("./middlewares/method_override")
 

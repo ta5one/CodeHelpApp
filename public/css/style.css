@@ -122,3 +122,16 @@ textarea {
     font-size: 18px;
     
 }
+
+.login-sign-btn {
+    padding: 5px 0;
+}
+
+.login-email {
+    margin-right: 36px;
+
+}
+
+.login-pass {
+    margin-right: 10px;
+}
