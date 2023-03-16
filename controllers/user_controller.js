@@ -1,11 +1,14 @@
 const db = require('./../db');
 const bcrypt = require('bcrypt');
 
+
+// Renders the login form
 const getLoginForm = (req, res) => {
   res.render('loginForm', { req });
 };
 
 
+// Authenticates the user, creates a session, and redirects to the questions list
 const login = async (req, res) => {
   const { email, password } = req.body;
 
@@ -38,10 +41,13 @@ const login = async (req, res) => {
 };
 
 
+// Renders the signup form
 const getSignupForm = (req, res) => {
   res.render('signupForm', { req });
 };
 
+
+// Registers a new user, creates a session, and redirects to the questions list
 const signUp = async (req, res) => {
   const { username, email, password } = req.body;
 
@@ -74,6 +80,7 @@ const signUp = async (req, res) => {
 };
 
 
+// Logs out the user and redirects to the homepage
 const logout = (req, res) => {
   req.session.destroy((err) => {
     if (err) {

@@ -1,6 +1,7 @@
 const db = require('./../db');
 
 
+// Fetches and renders all questions along with the username of the author
 const getAllQuestions = async (req, res) => {
   try {
     const result = await db.query(`
@@ -18,10 +19,13 @@ const getAllQuestions = async (req, res) => {
 };
 
 
+// Renders the form for submitting a new question
 const getNewQuestionForm = (req, res) => {
   res.render('newQuestion', { req });
 };
 
+
+// Creates a new question and redirects to the questions list
 const createQuestion = async (req, res) => {
   const { title, body } = req.body;
   const userId = req.session.user.id; 
@@ -39,6 +43,7 @@ const createQuestion = async (req, res) => {
 };
 
 
+// Fetches and renders a single question along with its answers
 const getQuestion = async (req, res) => {
   const questionId = req.params.id;
   try {
@@ -84,11 +89,14 @@ const getQuestion = async (req, res) => {
 };
 
 
+// Renders the form for submitting a new answer to a specific question
 const getNewAnswerForm = async (req, res) => {
   const questionId = req.params.id;
   res.render('newAnswer', { req, questionId });
 };
 
+
+// Creates a new answer for a specific question and redirects to the question details
 const createAnswer = async (req, res) => {
   const questionId = req.params.id;
   const { answer_text } = req.body;
@@ -107,6 +115,7 @@ const createAnswer = async (req, res) => {
 };
 
 
+// Deletes a question along with its answers and redirects to the questions list
 const deleteQuestion = async (req, res) => {
   const questionId = req.params.id;
   const currentUserId = req.session.user.id;
@@ -139,6 +148,7 @@ const deleteQuestion = async (req, res) => {
 };
 
 
+// Renders the form for editing a specific question
 const getEditQuestionForm = async (req, res) => {
   const questionId = req.params.id;
   const userId = req.session.user.id;
@@ -161,6 +171,7 @@ const getEditQuestionForm = async (req, res) => {
 };
 
 
+// Updates a specific question and redirects to the question details
 const editQuestion = async (req, res) => {
   const questionId = req.params.id;
   const userId = req.session.user.id;
