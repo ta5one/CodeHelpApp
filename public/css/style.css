@@ -23,9 +23,9 @@ body {
 }
 
 header {
-    background-color: #9f9f9f;
+    background-color: #ffffff;
     padding: 15px;
-    color: white;
+    color: rgb(0, 0, 0);
 }
 
 .welcome-user {
@@ -48,7 +48,7 @@ nav ul li {
 }
 
 nav ul li a {
-    color: white;
+    color: rgb(0, 0, 0);
     text-decoration: none;
     font-size: 18px;
 }
@@ -56,6 +56,7 @@ nav ul li a {
 h1 {
     font-size: 28px;
     margin-bottom: 15px;
+    font-family: cursive;
 }
 
 main {
@@ -63,10 +64,11 @@ main {
 }
 
 footer {
-    background-color: #9f9f9f;
+    background-color: white;
     padding: 15px;
     text-align: center;
     border-top: 1px solid #e5e5e5;
+    color: #000000;
 }
 
 a {
@@ -90,13 +92,13 @@ button {
     transition: 0.4s;
     background-color: #5f99cf;
     color: white;
-  }
+}
   
   button:hover {
     color: white;
     box-shadow: 0 0 20px rgba(0, 191, 255, 0.994);
     background-color: rgb(0, 146, 244, 1);
-  }
+}
 
 .btn-danger {
     background-color: rgb(252, 221, 221);
@@ -163,6 +165,21 @@ textarea {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
     padding: 16px; 
     margin-bottom: 16px;
+}
+
+.head-container {
+    display: flex;
+    align-items: center;
+    font-family: cursive;
   }
-  
+
+.head-container img {
+    height: 50px;
+    width: 50px;
+    margin-right: 10px;
+}
+
+#cc {
+    font-size: 32px;
+}
 
