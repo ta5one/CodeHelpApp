@@ -8,13 +8,16 @@
             <p>Posted by: <%= question.username %></p>
             <a href="/questions/<%= question.id %>">View Thread</a>
 
-            <form method="POST" action="/questions/<%= question.id %>/delete" style="display:inline;">
-                <input type="hidden" name="_method" value="DELETE">
-                <button type="submit" class="btn btn-danger">Delete</button>
-            </form>
+            <% if (req.session.user && req.session.user.id === question.user_id) { %>
+                <form method="POST" action="/questions/<%= question.id %>/delete" style="display:inline;">
+                    <input type="hidden" name="_method" value="DELETE">
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+            <% } %>
         </div>
     <% }) %>
 </div>
 <a href="/questions/new" class="ask-question">Ask a new question</a>
+
 
 
