@@ -16,6 +16,14 @@
             <li>
               <p><%= answer.answer_text %></p>
               <p>Answered by <%= answer.username %> on <%= answer.date %></p>
+              
+              <% if (currentUser && currentUser.id === answer.user_id) { %>
+                <form method="POST" action="/questions/<%= question.id %>/answers/<%= answer.id %>/delete" style="display:inline;">
+                  <input type="hidden" name="_method" value="DELETE">
+                  <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+              <% } %>
+              
             </li>
           <% }) %>
         </ul>
@@ -23,6 +31,7 @@
         <p>No answers yet. Be the first to answer!</p>
       <% } %>
     </section>
+    
   
     <section>
       <h3>Submit an Answer</h3>

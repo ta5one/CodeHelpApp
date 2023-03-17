@@ -195,6 +195,35 @@ const editQuestion = async (req, res) => {
 };
 
 
+// Only the user who posted the answer may delete it
+const deleteAnswer = async (req, res) => {
+  const answerId = req.params.answerId;
+  const currentUserId = req.session.user.id;
+
+  try {
+    const answerResult = await db.query('SELECT * FROM answers WHERE id = $1', [answerId]);
+    const answer = answerResult.rows[0];
+
+    if (!answer) {
+      res.status(404).send("Answer not found");
+      return;
+    }
+
+    if (answer.user_id === currentUserId) {
+      await db.query('DELETE FROM answers WHERE id = $1', [answerId]);
+      res.redirect(`/questions/${answer.question_id}`);
+    } else {
+      res.status(403).send("Only the user who posted this answer can delete it");
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Server error');
+  }
+};
+
+
+
+
 module.exports = {
   getAllQuestions,
   getNewQuestionForm,
@@ -205,5 +234,6 @@ module.exports = {
   deleteQuestion,
   getEditQuestionForm,
   editQuestion,
+  deleteAnswer,
 };
 

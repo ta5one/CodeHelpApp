@@ -63,6 +63,8 @@ app.post('/questions/:id/answers', ensureLoggedIn, questionController.createAnsw
 app.get('/questions/:id/edit', ensureLoggedIn, questionController.getEditQuestionForm);
 app.put('/questions/:id', ensureLoggedIn, questionController.editQuestion);
 app.delete('/questions/:id/delete', ensureLoggedIn, questionController.deleteQuestion);
+app.delete('/questions/:questionId/answers/:answerId/delete', ensureLoggedIn, questionController.deleteAnswer);
+
 
 
 app.listen(port, () => {
